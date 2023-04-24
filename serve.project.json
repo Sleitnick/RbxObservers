@@ -1,0 +1,11 @@
+{
+	"name": "rbx-observers-serve",
+	"tree": {
+		"$className": "DataModel",
+		"ServerStorage": {
+			"Observers": {
+				"$path": "default.project.json"
+			}
+		}
+	}
+}

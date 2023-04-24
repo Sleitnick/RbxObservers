@@ -1,0 +1,9 @@
+gitRepoUrl = "https://github.com/Sleitnick/RbxObservers"
+gitSourceBranch = "main"
+
+[home]
+enabled = true
+includeReadme = true
+
+[docusaurus]
+tagline = "Utility observer functions for Roblox"
