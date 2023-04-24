@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[183],{3891:s=>{s.exports=JSON.parse('{"sourceUrl":"https://github.com/Sleitnick/RbxObservers/blob/main","baseUrl":"/RbxObservers/","classOrder":[],"apiCategories":[]}')}}]);
