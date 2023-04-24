@@ -1,0 +1,9 @@
+[package]
+name = "sleitnick/observers"
+description = "A collection of observer utility functions"
+version = "0.1.0"
+license = "MIT"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["**"]
+include = ["lib", "lib/**", "wally.toml", "wally.lock", "default.project.json", "LICENSE.md"]
