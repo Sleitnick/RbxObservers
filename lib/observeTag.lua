@@ -92,10 +92,10 @@ function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancesto
 			end
 
 			-- Run the callback in protected mode:
-			local success, cleanup = xpcall(function(instance: T)
-				local cleanup = callback(instance)
-				assert(typeof(cleanup) == "function", "callback must return a function")
-				return cleanup
+			local success, cleanup = xpcall(function(inst: T)
+				local clean = callback(inst)
+				assert(typeof(clean) == "function", "callback must return a function")
+				return clean
 			end, debug.traceback, instance :: any)
 
 			-- If callback errored, print out the traceback:
@@ -149,7 +149,7 @@ function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancesto
 
 		instances[instance] = "__dead__"
 
-		ancestryConn[instance] = instance.AncestryChanged:Connect(function(_, parent)
+		ancestryConn[instance] = instance.AncestryChanged:Connect(function()
 			OnAncestryChanged(instance)
 		end)
 		OnAncestryChanged(instance)
