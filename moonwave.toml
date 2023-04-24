@@ -3,7 +3,7 @@ gitSourceBranch = "main"
 
 [home]
 enabled = true
-includeReadme = true
+includeReadme = false
 
 [docusaurus]
 tagline = "Utility observer functions for Roblox"
