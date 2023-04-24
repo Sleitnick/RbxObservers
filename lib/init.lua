@@ -1,3 +1,5 @@
+--!strict
+
 --[=[
 	@class Observers
 
