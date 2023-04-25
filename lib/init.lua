@@ -8,4 +8,5 @@
 
 return {
 	observeTag = require(script.observeTag),
+	observeAttribute = require(script.observeAttribute),
 }
