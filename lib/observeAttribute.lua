@@ -111,6 +111,7 @@ local function observeAttribute(
 		onAttrChangedConn:Disconnect()
 		if cleanFn ~= nil then
 			task.spawn(cleanFn)
+			cleanFn = nil
 		end
 	end
 end

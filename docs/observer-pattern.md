@@ -66,3 +66,7 @@ The code above will fire any time the `Color` property changes for `part`. Howev
 ## Differences from Reactive (RX) Programming
 
 Reactive programming cares about reacting, transforming, and consuming state. While the observer pattern is quite similar, reactive programming doesn't define the lifetime of a given state.
+
+## Cleanup Idempotence
+
+All cleanup functions should be idempotent. In other words, cleanup functions should be capable of being called many times without causing issues. For example, the top-level cleanup for an observer could be called multiple times, but should never cause a problem. This creates a safe environment for cleanup operations.
