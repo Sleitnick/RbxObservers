@@ -6,4 +6,4 @@ license = "MIT"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 exclude = ["**"]
-include = ["lib", "lib/**", "wally.toml", "wally.lock", "default.project.json", "LICENSE.md"]
+include = ["out", "out/**/*.lua", "wally.toml", "wally.lock", "default.project.json", "LICENSE.md"]

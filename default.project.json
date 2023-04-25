@@ -1,6 +1,6 @@
 {
 	"name": "Observers",
 	"tree": {
-		"$path": "lib"
+		"$path": "out"
 	}
 }

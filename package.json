@@ -1,0 +1,40 @@
+{
+  "name": "@rbxts/observers",
+  "version": "0.2.1",
+  "description": "Collection of observer utility functions",
+  "main": "out/init.lua",
+  "scripts": {
+    "build": "rbxtsc",
+    "watch": "rbxtsc -w",
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm run wally:publish",
+    "wally:publish": "wally publish"
+  },
+  "keywords": [
+    "observers"
+  ],
+  "author": "sleitnick",
+  "repository": "github:Sleitnick/RbxObservers",
+  "license": "MIT",
+  "types": "out/index.d.ts",
+  "files": [
+    "out",
+    "!**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@rbxts/compiler-types": "^2.1.0-types.1",
+    "@rbxts/types": "^1.0.677",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-roblox-ts": "^0.0.35",
+    "prettier": "^2.8.8",
+    "roblox-ts": "^2.1.0",
+    "typescript": "^4.9.5"
+  }
+}
