@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Getting Started
 
-These Roblox utility functions can be acquired using [Wally](https://wally.run/), a package manager for Roblox.
+The Observers package can be acquired using [Wally](https://wally.run/), a package manager for Roblox. Alternatively, the `@rbxts/observers` package is available on npm for developers using roblox-ts.
 
 ## Wally Configuration
 Once Wally is installed, run `wally init` on your project directory, and then add the various utility modules found here as dependencies. For example, the following could be a `wally.toml` file for a project that includes a few of these modules:
@@ -16,7 +16,7 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Signal = "sleitnick/observers@^1"
+Observers = "sleitnick/observers@^1"
 ```
 
 To install, run `wally install` within your project. Wally will create a Package folder in your directory with the installed dependency.
@@ -51,4 +51,12 @@ Observers.observeTag("SomeTag", function(instance: Instance)
 		print(`Stopped observing {instance}`)
 	end
 end)
+```
+
+## roblox-ts
+
+For developers using roblox-ts, install the `@rbxts/observers` package.
+
+```sh
+npm i --save @rbxts/observers
 ```
