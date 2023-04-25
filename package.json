@@ -1,11 +1,11 @@
 {
   "name": "@rbxts/observers",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Collection of observer utility functions",
   "main": "out/init.lua",
   "scripts": {
-    "build": "rbxtsc",
-    "watch": "rbxtsc -w",
+    "build": "npx rbxtsc --rojo rbxts.project.json",
+    "watch": "npx rbxtsc --rojo rbxts.project.json -w",
     "prepublishOnly": "npm run build",
     "postpublish": "npm run wally:publish",
     "wally:publish": "wally publish"
