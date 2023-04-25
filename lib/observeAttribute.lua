@@ -1,5 +1,26 @@
 --!strict
 
+export type AttributeValue =
+	string
+	| boolean
+	| number
+	| UDim
+	| UDim2
+	| BrickColor
+	| Color3
+	| Vector2
+	| Vector3
+	| CFrame
+	| NumberSequence
+	| ColorSequence
+	| NumberRange
+	| Rect
+	| Font
+
+local function defaultGuard(_value: AttributeValue)
+	return true
+end
+
 --[=[
 	@within Observers
 
@@ -17,6 +38,18 @@
 	end)
 	```
 
+	An optional `guard` predicate function can be supplied to further narrow which values trigger the observer.
+	For instance, if only strings are wanted:
+
+	```lua
+	observeAttribute(
+		workspace.Model,
+		"MyAttribute",
+		function(value) print("value is a string", value) end,
+		function(value) return typeof(value) == "string" end
+	)
+	```
+
 	The observer also returns a function that can be called to clean up the observer:
 	```lua
 	local stopObserving = observeAttribute(workspace.Model, "MyAttribute", function(value) ... end)
@@ -25,11 +58,18 @@
 	stopObserving()
 	```
 ]=]
-local function observeAttribute<T>(instance: Instance, name: string, callback: (value: T) -> () -> ()): () -> ()
+local function observeAttribute(
+	instance: Instance,
+	name: string,
+	callback: (value: AttributeValue) -> () -> (),
+	guard: ((value: AttributeValue) -> boolean)?
+): () -> ()
 	local cleanFn: (() -> ())? = nil
 
 	local onAttrChangedConn: RBXScriptConnection
 	local changedId = 0
+
+	local valueGuard: (value: AttributeValue) -> boolean = if guard ~= nil then guard else defaultGuard
 
 	local function OnAttributeChanged()
 		if cleanFn ~= nil then
@@ -42,7 +82,7 @@ local function observeAttribute<T>(instance: Instance, name: string, callback: (
 
 		local value = instance:GetAttribute(name)
 
-		if value ~= nil then
+		if value ~= nil and valueGuard(value) then
 			task.spawn(function()
 				local clean = callback(value)
 				if id == changedId and onAttrChangedConn.Connected then
