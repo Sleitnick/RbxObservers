@@ -2,6 +2,22 @@
 
 local observePlayer = require(script.Parent.observePlayer)
 
+--[=[
+	@within Observers
+
+	Creates an observer that captures each character in the game.
+
+	```lua
+	observeCharacter(function(player, character)
+		print("Character spawned for " .. player.Name)
+
+		return function()
+			-- Cleanup
+			print("Character removed for " .. player.Name)
+		end
+	end)
+	```
+]=]
 local function observeCharacter(callback: (player: Player, character: Model) -> (() -> ())?): () -> ()
 	return observePlayer(function(player)
 		local cleanupFn: (() -> ())? = nil
