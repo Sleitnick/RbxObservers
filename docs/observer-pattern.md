@@ -16,13 +16,17 @@ The observer pattern should provide two crucial elements:
 The general layout of an observer should look like such:
 
 ```lua
-observeSomething(...params, function(state)
+local stopObserving = observeSomething(...params, function(state)
 	-- Do something with "state". This runs every time state changes, including the initial state.
 
 	return function()
-		-- Cleanup. Called once "state" changes to something else.
+		-- Cleanup. Called once "state" changes to something else, or the `stopObserving` function is called.
 	end
 end)
+
+-- At anytime, the `stopObserving` function can be called to stop the above observer and clean up
+-- and currently-existing observations:
+stopObserving()
 ```
 
 ## Why Lifetime is Important
