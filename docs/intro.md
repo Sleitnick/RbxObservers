@@ -16,7 +16,7 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Observers = "sleitnick/observers@^1"
+Observers = "sleitnick/observers@^0.3.2"
 ```
 
 To install, run `wally install` within your project. Wally will create a Package folder in your directory with the installed dependency.

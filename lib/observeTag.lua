@@ -56,7 +56,6 @@ type InstanceStatus = "__inflight__" | "__dead__"
 function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancestors: { Instance }?): () -> ()
 	local instances: { [Instance]: InstanceStatus | () -> () } = {}
 	local ancestryConn: { [Instance]: RBXScriptConnection } = {}
-	local inFlightIds: { [Instance]: number } = {}
 
 	local onInstAddedConn: RBXScriptConnection
 	local onInstRemovedConn: RBXScriptConnection
@@ -76,18 +75,12 @@ function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancesto
 	end
 
 	local function AttemptStartup(instance: Instance)
-		local id = (inFlightIds[instance] or 0) + 1
-		inFlightIds[instance] = id
-
 		-- Mark instance as starting up:
 		instances[instance] = "__inflight__"
 
 		-- Attempt to run the callback:
 		task.defer(function()
 			if instances[instance] ~= "__inflight__" then
-				return
-			end
-			if inFlightIds[instance] ~= id then
 				return
 			end
 
