@@ -4,7 +4,7 @@ local RunService = game:GetService("RunService")
 --[=[
 	@within Observers
 
-	Creates an observer that captures every part enters the Given Part
+	 Creates an observer that captures every `BasePart` enters the Given Part
 
 	```lua
 	local OverlapParam = OverlapParams.new()
@@ -21,7 +21,7 @@ local RunService = game:GetService("RunService")
 	end)
 	```
 ]=]
-local function observeRegion(basePart: BasePart , OverlapParam , callback: (part:BasePart)-> () -> ()): () -> ()
+local function observeRegion(basePart: BasePart , OverlapParam: OverlapParams , callback: (part:BasePart)-> () -> ()): () -> ()
 	local PartCache: {[Instance]: (() -> ())} = {}
 	local HeartbeatConnection: RBXScriptConnection = nil
 
@@ -53,7 +53,7 @@ local function observeRegion(basePart: BasePart , OverlapParam , callback: (part
 	end
 	-- update:
 	HeartbeatConnection = RunService.Heartbeat:Connect(OnUpdate)
-	-- initial call
+	-- initial call:
 	task.defer(function()
 		if HeartbeatConnection.Connected then
 			return

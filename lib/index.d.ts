@@ -131,6 +131,38 @@ interface Observers {
 	observeCharacter: <C extends Model = Model>(
 		callback: (player: Player, character: C) => (() => void) | void,
 	) => () => void;
+		/**
+	 * Creates an observer that captures every `BasePart` enters the Given Part
+	 *
+	 * ```ts
+	 * const part = game.Workspace.FindFirstChild("Part") as BasePart
+	 * 
+	 * const OverlapParam = new OverlapParams()
+	 * OverlapParam.FilterType = Enum.RaycastFilterType.Exclude
+	 * OverlapParam.FilterDescendantsInstances = [part]
+	 * 
+	 * const stop = Observers.observeRegion(part, OverlapParam, (otherPart) => {
+	 * 	// Do something with `otherPart` when it enters.
+	 * 	return () => {
+	 * 		// Cleanup. Runs when the otherPart leave.
+	 * 	};
+	 * });
+	 *
+	 * // Optionally, stop the observer from observing anything, and clean up current observations:
+	 * stop();
+	 * ```
+	 *
+	 * @param BasePart
+	 * @param OverlapParams
+	 * @param callback
+	 * @returns Cleanup function.
+	 */
+	observeRegion: (
+		BasePart: BasePart,
+		OverlapParam: OverlapParams,
+		callback: (part:BasePart) => () => void,
+	) => () => void;
+	
 }
 
 declare const Observers: Observers;
