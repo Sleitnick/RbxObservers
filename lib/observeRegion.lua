@@ -16,7 +16,7 @@ local RunService = game:GetService("RunService")
 
 		return function()
 			-- Cleanup
-			print(`part leaves:- {part.Name}`)
+			print(`part leave:- {part.Name}`)
 		end
 	end)
 	```
