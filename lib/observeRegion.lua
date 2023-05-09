@@ -1,69 +1,75 @@
 --!strict
+
 local RunService = game:GetService("RunService")
 
 --[=[
 	@within Observers
 
-	 Creates an observer that captures every `BasePart` enters the Given Part
+	 Creates an observer that captures every `BasePart` that enters the given region.
 
 	```lua
-	local OverlapParam = OverlapParams.new()
-	OverlapParam.FilterDescendantsInstances = {workspace.Part}
-	OverlapParam.FilterType = Enum.RaycastFilterType.Exclude
+	local overlapParams = OverlapParams.new()
+	overlapParams.FilterDescendantsInstances = {workspace.Part}
+	overlapParams.FilterType = Enum.RaycastFilterType.Exclude
 
-	observeRegion(workspace.Part, OverlapParam, function(part: BasePart)
-		print(`part enterd:- {part.Name}`)
+	observeRegion(workspace.Part, overlapParams, function(part: BasePart)
+		print(`Part Entered: {part.Name}`)
 
 		return function()
-			-- Cleanup
-			print(`part leave:- {part.Name}`)
+			print(`Part Left: {part.Name}`)
 		end
 	end)
 	```
 ]=]
-local function observeRegion(basePart: BasePart , OverlapParam: OverlapParams , callback: (part:BasePart)-> () -> ()): () -> ()
-	local PartCache: {[Instance]: (() -> ())} = {}
-	local HeartbeatConnection: RBXScriptConnection = nil
+local function observeRegion(
+	basePart: BasePart,
+	overlapParams: OverlapParams,
+	callback: (part: BasePart) -> () -> ()
+): () -> ()
+	local heartbeatConn: RBXScriptConnection
 
-	local function Cleanup(currentPart: {Instance})
-		for Part , cleanFn in PartCache do
-			if not table.find(currentPart , Part) then
-				task.spawn(cleanFn)
-				PartCache[Part] = nil
+	local cleanupsPerPart: { [BasePart]: () -> () } = {}
+
+	local function OnPartLeft(part: BasePart)
+		local cleanup = cleanupsPerPart[part]
+		cleanupsPerPart[part] = nil
+		if typeof(cleanup) == "function" then
+			task.spawn(cleanup)
+		end
+	end
+
+	local function Clean(currentParts: { BasePart })
+		for part in cleanupsPerPart do
+			if not table.find(currentParts, part) then
+				task.spawn(OnPartLeft, part)
 			end
 		end
 	end
 
-	local function CleanupForAll()
-		for ins , cleanFn in PartCache do
-			task.spawn(cleanFn)
-			PartCache[ins] = nil
-		end
-	end
+	local function OnHeartbeat()
+		local result = workspace:GetPartsInPart(basePart, overlapParams)
+		task.spawn(Clean, result)
 
-	local function OnUpdate()
-		local result = workspace:GetPartsInPart(basePart , OverlapParam)
-		task.spawn(Cleanup , result)
-		for _ , part: BasePart in result do
-			if PartCache[part] then continue end
+		for _, part in result do
+			if cleanupsPerPart[part] then
+				continue
+			end
 			task.spawn(function()
-				PartCache[part] = callback(part)
+				cleanupsPerPart[part] = callback(part)
 			end)
 		end
 	end
-	-- update:
-	HeartbeatConnection = RunService.Heartbeat:Connect(OnUpdate)
-	-- initial call:
-	task.defer(function()
-		if HeartbeatConnection.Connected then
-			return
-		end
-		OnUpdate()
-	end)
+
+	heartbeatConn = RunService.Heartbeat:Connect(OnHeartbeat)
 
 	return function()
-		HeartbeatConnection:Disconnect()
-		task.spawn(CleanupForAll)
+		heartbeatConn:Disconnect()
+
+		local part = next(cleanupsPerPart)
+		while part do
+			OnPartLeft(part)
+			part = next(cleanupsPerPart)
+		end
 	end
 end
 
