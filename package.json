@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/observers",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Collection of observer utility functions",
   "main": "out/init.lua",
   "scripts": {

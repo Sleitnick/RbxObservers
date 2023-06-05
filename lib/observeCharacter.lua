@@ -28,7 +28,7 @@ local function observeCharacter(callback: (player: Player, character: Model) -> 
 			local currentCharCleanup: (() -> ())? = nil
 
 			-- Call the callback:
-			task.spawn(function()
+			task.defer(function()
 				local cleanup = callback(player, character)
 				-- If a cleanup function is given, save it for later:
 				if typeof(cleanup) == "function" then
