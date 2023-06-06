@@ -18,7 +18,7 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
-Observers = "sleitnick/observers@^0.3.2"
+Observers = "sleitnick/observers@^0.3.3"
 ```
 
 ### roblox-ts
@@ -28,7 +28,7 @@ Add `@rbxts/observers` to your `package.json` dependencies list, or run the npm 
 ```json
 {
 	"dependencies": {
-		"@rbxts/observers": "^0.3.2"
+		"@rbxts/observers": "^0.3.3"
 	}
 }
 ```
