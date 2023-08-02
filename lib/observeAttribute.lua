@@ -22,6 +22,8 @@ local function defaultGuard(_value: AttributeValue)
 end
 
 --[=[
+	@within Observers
+
 	Creates an observer around an attribute of a given instance. The callback will fire for any non-nil
 	attribute value.
 
