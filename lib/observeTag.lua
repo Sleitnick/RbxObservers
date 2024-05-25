@@ -53,7 +53,7 @@ type InstanceStatus = "__inflight__" | "__dead__"
 	)
 	```
 ]=]
-function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancestors: { Instance }?): () -> ()
+function observeTag<T>(tag: string, callback: (instance: T) -> (() -> ())?, ancestors: { Instance }?): () -> ()
 	local instances: { [Instance]: InstanceStatus | () -> () } = {}
 	local ancestryConn: { [Instance]: RBXScriptConnection } = {}
 
@@ -87,7 +87,9 @@ function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancesto
 			-- Run the callback in protected mode:
 			local success, cleanup = xpcall(function(inst: T)
 				local clean = callback(inst)
-				assert(typeof(clean) == "function", "callback must return a function")
+				if clean ~= nil then
+					assert(typeof(clean) == "function", "callback must return a function or nil")
+				end
 				return clean
 			end, debug.traceback, instance :: any)
 
@@ -105,7 +107,9 @@ function observeTag<T>(tag: string, callback: (instance: T) -> () -> (), ancesto
 
 			if instances[instance] ~= "__inflight__" then
 				-- Instance lost its tag or was destroyed before callback completed; call cleanup immediately:
-				task.spawn(cleanup :: any)
+				if cleanup ~= nil then
+					task.spawn(cleanup :: any)
+				end
 			else
 				-- Good startup; mark the instance with the associated cleanup function:
 				instances[instance] = cleanup :: any
