@@ -76,7 +76,7 @@ interface Observers {
 	 */
 	observeTag: <T extends Instance = Instance>(
 		tag: string,
-		callback: (instance: T) => () => void,
+		callback: (instance: T) => (() => void) | void,
 		ancestors?: Instance[],
 	) => () => void;
 
