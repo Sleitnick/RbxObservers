@@ -1,5 +1,9 @@
 --!strict
 
+type CallbackReturnFn<T> = (value: T) -> () -> ()
+type CallbackReturnVoid<T> = (value: T) -> ()
+type Callback<T> = CallbackReturnFn<T> | CallbackReturnVoid<T>
+
 --[=[
 	@within Observers
 
@@ -16,7 +20,7 @@
 	end)
 	```
 ]=]
-local function observeProperty(instance: Instance, property: string, callback: (value: unknown) -> () -> ()): () -> ()
+local function observeProperty(instance: Instance, property: string, callback: Callback<unknown>): () -> ()
 	local cleanFn: (() -> ())? = nil
 
 	local propChangedConn: RBXScriptConnection
@@ -34,11 +38,13 @@ local function observeProperty(instance: Instance, property: string, callback: (
 		local value = (instance :: any)[property]
 
 		task.spawn(function()
-			local clean = callback(value)
-			if id == changedId and propChangedConn.Connected then
-				cleanFn = clean
-			else
-				task.spawn(clean)
+			local clean = (callback :: any)(value)
+			if typeof(clean) == "function" then
+				if id == changedId and propChangedConn.Connected then
+					cleanFn = clean
+				else
+					task.spawn(clean)
+				end
 			end
 		end)
 	end

@@ -1,5 +1,9 @@
 --!strict
 
+type CallbackReturnFn = (player: Player) -> () -> ()
+type CallbackReturnVoid = (player: Player) -> ()
+type Callback = CallbackReturnFn | CallbackReturnVoid
+
 local Players = game:GetService("Players")
 
 --[=[
@@ -18,7 +22,7 @@ local Players = game:GetService("Players")
 	end)
 	```
 ]=]
-local function observePlayer(callback: (player: Player) -> (() -> ())?): () -> ()
+local function observePlayer(callback: Callback): () -> ()
 	local playerAddedConn: RBXScriptConnection
 	local playerRemovingConn: RBXScriptConnection
 
@@ -30,7 +34,7 @@ local function observePlayer(callback: (player: Player) -> (() -> ())?): () -> (
 		end
 
 		task.spawn(function()
-			local cleanup = callback(player)
+			local cleanup = (callback :: any)(player)
 			if typeof(cleanup) == "function" then
 				if playerAddedConn.Connected and player.Parent then
 					cleanupsPerPlayer[player] = cleanup

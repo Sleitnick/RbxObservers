@@ -2,6 +2,10 @@
 
 local observePlayer = require(script.Parent.observePlayer)
 
+type CallbackReturnFn = (player: Player, character: Model) -> () -> ()
+type CallbackReturnVoid = (player: Player, character: Model) -> ()
+type Callback = CallbackReturnFn | CallbackReturnVoid
+
 --[=[
 	@within Observers
 
@@ -18,7 +22,7 @@ local observePlayer = require(script.Parent.observePlayer)
 	end)
 	```
 ]=]
-local function observeCharacter(callback: (player: Player, character: Model) -> (() -> ())?): () -> ()
+local function observeCharacter(callback: Callback): () -> ()
 	return observePlayer(function(player)
 		local cleanupFn: (() -> ())? = nil
 
@@ -29,7 +33,7 @@ local function observeCharacter(callback: (player: Player, character: Model) -> 
 
 			-- Call the callback:
 			task.defer(function()
-				local cleanup = callback(player, character)
+				local cleanup = (callback :: any)(player, character)
 				-- If a cleanup function is given, save it for later:
 				if typeof(cleanup) == "function" then
 					if characterAddedConn.Connected and character.Parent then

@@ -1,7 +1,7 @@
 --!strict
 
 export type AttributeValue =
-	string
+	| string
 	| boolean
 	| number
 	| UDim
@@ -16,6 +16,10 @@ export type AttributeValue =
 	| NumberRange
 	| Rect
 	| Font
+
+type CallbackReturnFn = (value: AttributeValue) -> () -> ()
+type CallbackReturnVoid = (value: AttributeValue) -> ()
+type Callback = CallbackReturnFn | CallbackReturnVoid
 
 local function defaultGuard(_value: AttributeValue)
 	return true
@@ -61,7 +65,7 @@ end
 local function observeAttribute(
 	instance: Instance,
 	name: string,
-	callback: (value: AttributeValue) -> () -> (),
+	callback: Callback,
 	guard: ((value: AttributeValue) -> boolean)?
 ): () -> ()
 	local cleanFn: (() -> ())? = nil
@@ -80,15 +84,17 @@ local function observeAttribute(
 		changedId += 1
 		local id = changedId
 
-		local value = instance:GetAttribute(name)
+		local value = instance:GetAttribute(name) :: AttributeValue?
 
 		if value ~= nil and valueGuard(value) then
 			task.spawn(function()
-				local clean = callback(value)
-				if id == changedId and onAttrChangedConn.Connected then
-					cleanFn = clean
-				else
-					task.spawn(clean)
+				local clean = (callback :: any)(value)
+				if typeof(clean) == "function" then
+					if id == changedId and onAttrChangedConn.Connected then
+						cleanFn = clean
+					else
+						task.spawn(clean)
+					end
 				end
 			end)
 		end

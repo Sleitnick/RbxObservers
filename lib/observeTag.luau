@@ -4,6 +4,10 @@ local CollectionService = game:GetService("CollectionService")
 
 type InstanceStatus = "__inflight__" | "__dead__"
 
+type CallbackReturnFn<T> = (instance: T) -> () -> ()
+type CallbackReturnVoid<T> = (instance: T) -> ()
+type Callback<T> = CallbackReturnFn<T> | CallbackReturnVoid<T>
+
 --[=[
 	@within Observers
 
@@ -53,7 +57,7 @@ type InstanceStatus = "__inflight__" | "__dead__"
 	)
 	```
 ]=]
-function observeTag<T>(tag: string, callback: (instance: T) -> (() -> ())?, ancestors: { Instance }?): () -> ()
+function observeTag<T>(tag: string, callback: Callback<T>, ancestors: { Instance }?): () -> ()
 	local instances: { [Instance]: InstanceStatus | () -> () } = {}
 	local ancestryConn: { [Instance]: RBXScriptConnection } = {}
 
@@ -86,7 +90,7 @@ function observeTag<T>(tag: string, callback: (instance: T) -> (() -> ())?, ance
 
 			-- Run the callback in protected mode:
 			local success, cleanup = xpcall(function(inst: T)
-				local clean = callback(inst)
+				local clean = (callback :: any)(inst)
 				if clean ~= nil then
 					assert(typeof(clean) == "function", "callback must return a function or nil")
 				end
