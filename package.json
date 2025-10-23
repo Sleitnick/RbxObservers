@@ -2,7 +2,7 @@
   "name": "@rbxts/observers",
   "version": "0.3.4",
   "description": "Collection of observer utility functions",
-  "main": "out/init.lua",
+  "main": "out/init.luau",
   "scripts": {
     "build": "npx rbxtsc --rojo rbxts.project.json",
     "watch": "npx rbxtsc --rojo rbxts.project.json -w",
