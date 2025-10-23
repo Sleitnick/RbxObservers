@@ -20,6 +20,7 @@
 		// configurable
 		"rootDir": "lib",
 		"outDir": "out",
+		"baseUrl": "lib",
 		"incremental": true,
 		"tsBuildInfoFile": "out/tsconfig.tsbuildinfo",
 		"declaration": true
