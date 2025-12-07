@@ -1,6 +1,6 @@
 --!strict
 
-type Callback = (player: Player) -> (() -> ())?
+type Callback = (player: Player) -> ((Enum.PlayerExitReason) -> ())?
 
 local Players = game:GetService("Players")
 
@@ -42,7 +42,6 @@ local function observePlayer(callback: Callback): () -> ()
 					task.spawn(cleanup, inflight[player])
 				end
 			end
-			inflight[player] = nil
 		end)
 	end
 
