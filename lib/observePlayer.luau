@@ -46,14 +46,14 @@ local function observePlayer(callback: Callback): () -> ()
 	end
 
 	local function OnPlayerRemoving(player: Player, exitReason: Enum.PlayerExitReason)
-		if inflight[player] then
+		if exitReason then
 			inflight[player] = exitReason
 		end
 
 		local cleanup = cleanupsPerPlayer[player]
 		cleanupsPerPlayer[player] = nil
 		if typeof(cleanup) == "function" then
-			task.spawn(cleanup, exitReason)
+			task.spawn(cleanup, inflight[player])
 		end
 	end
 
