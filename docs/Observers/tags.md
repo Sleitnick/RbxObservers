@@ -1,6 +1,6 @@
 # Tags
 
-The CollectionService allows developers to assign arbitrary tags to any instance in a game. The `observeTag` observer can be used to observe instances with specific tags. This can be used to designate specific behavior to an object when it has a given tag, and to clean up the behavior once the tag is removed.
+The CollectionService allows developers to assign arbitrary tags to any instance in a game. The `observeTag` and `observeTags` observers can be used to monitor instances based on these tags. This is ideal for designating specific behavior to an object when it has a given set of tags and ensuring that behavior is cleaned up once any of the tags are removed.
 
 ```lua
 -- Observe instances with the "Disco" tag:
@@ -17,6 +17,24 @@ Observers.observeTag("Disco", function(part: BasePart)
 	return function()
 		task.cancel(discoThread)
 	end
+end)
+```
+
+```lua
+-- Only turn on the disco if the part is "Disco" AND "Active":
+Observers.observeTags({"Disco", "Active"}, function(part: BasePart)
+    local discoThread = task.spawn(function()
+        while true do
+            task.wait(0.2)
+            part.Color = Color3.new(math.random(), math.random(), math.random())
+        end
+    end)
+
+    return function()
+        task.cancel(discoThread)
+        -- Optionally reset the color when deactivated
+        part.Color = Color3.new(1, 1, 1)
+    end
 end)
 ```
 
@@ -46,5 +64,18 @@ Observers.observeTag(
 		...
 	end,
 	allowedAncestors
+)
+```
+
+```lua
+local allowedAncestors = { workspace }
+
+-- Works for both observeTag and observeTags:
+Observers.observeTags(
+    {"Disco", "Active"}, 
+    function(part: BasePart)
+        ...
+    end, 
+    allowedAncestors
 )
 ```

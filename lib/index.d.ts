@@ -81,6 +81,30 @@ interface Observers {
 	) => () => void;
 
 	/**
+	 * Observe instances with the given tags.
+	 *
+	 * ```ts
+	 * Observers.observeTags({"MyTag1", "MyTag2"}, (instance) => {
+	 * 	// Do something with `instance`.
+	 * 	return () => {
+	 * 		// Cleanup.
+	 * 		// The instance is either gone, lost one or more tags, or moved to a non-allowed ancestor (if supplied).
+	 * 	};
+	 * });
+	 * ```
+	 *
+	 * @param tags List CollectionService tags.
+	 * @param callback Observer function. Runs for every instance with the given tag.
+	 * @param ancestors Optional inclusion list of allowed ancestors. The default is to allow all ancestors.
+	 * @returns Cleanup function.
+	 */
+	observeTags: <T extends Instance = Instance>(
+		tags: string,
+		callback: (instance: T) => (() => void) | void,
+		ancestors?: Instance[],
+	) => () => void;
+
+	/**
 	 * Observes players in the game.
 	 *
 	 * ```ts
