@@ -149,6 +149,27 @@ interface Observers {
 	 * @returns Cleanup function, which stops observing the local character.
 	 */
 	observeLocalCharacter: <C extends Model = Model>(callback: (character: C) => (() => void) | void) => () => void;
+
+	/**
+	 * Observes children of the given instance.
+	 *
+	 * ```ts
+	 * Observers.observeChildren(workspace, (child) => {
+	 * 	print(`Child added: ${child.Name}`);
+	 * 	return () => {
+	 * 		print(`Child removed: ${child.Name}`);
+	 * 	};
+	 * });
+	 * ```
+	 *
+	 * @param instance The instance whose children to observe.
+	 * @param callback Observer called for each child. Optional cleanup function can be returned, which is called when the child is removed.
+	 * @returns Cleanup function, which stops observing children.
+	 */
+	observeChildren: (
+		instance: Instance,
+		callback: (child: Instance) => (() => void) | void,
+	) => () => void;
 }
 
 declare const Observers: Observers;
