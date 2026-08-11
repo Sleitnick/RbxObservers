@@ -70,3 +70,20 @@ Reactive programming cares about reacting, transforming, and consuming state. Wh
 ## Cleanup Idempotence
 
 All cleanup functions should be idempotent. In other words, cleanup functions should be capable of being called many times without causing issues. For example, the top-level cleanup for an observer could be called multiple times, but should never cause a problem. This creates a safe environment for cleanup operations.
+
+With this in mind, cleanup functions may set variables to `nil`, which might appear as a misunderstanding of Luau's GC system at first glance. For instance:
+```luau
+function someObserver(...)
+	local someCallback: () -> ()
+
+	-- Cleanup fn:
+	return function()
+		if someCallback then
+			-- We want to ensure 'someCallback' won't be called again if other code calls this cleanup
+			-- function again. Thus, we will set the function variable to nil after calling it.
+			task.spawn(someCallback)
+			someCallback = nil -- Again, this has nothing to do with memory cleanup, but for ensuring idempotence.
+		end
+	end
+end
+```
