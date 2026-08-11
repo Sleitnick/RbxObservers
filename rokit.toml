@@ -1,10 +1,5 @@
-# This file lists tools managed by Rokit, a toolchain manager for Roblox projects.
-# For more information, see https://github.com/rojo-rbx/rokit
-
-# New tools can be added by running `rokit add <tool>` in a terminal.
-
 [tools]
-StyLua = "JohnnyMorganz/StyLua@2.3.1"
-selene = "Kampfkarren/selene@0.29.0"
-rojo = "rojo-rbx/rojo@7.6.0"
+StyLua = "JohnnyMorganz/StyLua@2.5.2"
+selene = "Kampfkarren/selene@0.31.0"
+rojo = "rojo-rbx/rojo@7.7.0"
 wally = "UpliftGames/wally@0.3.2"
