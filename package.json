@@ -14,7 +14,10 @@
     "observers"
   ],
   "author": "sleitnick",
-  "repository": "github:Sleitnick/RbxObservers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sleitnick/RbxObservers.git"
+  },
   "license": "MIT",
   "types": "out/index.d.ts",
   "files": [
