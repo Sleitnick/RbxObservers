@@ -9,12 +9,12 @@ type InstanceHandle = {
 --[=[
 	@within Observers
 
-	Creates an observer that captures the existence of an InstanceHandle's Instance
+	Creates an observer that captures the existence of an InstanceHandle's instance
 	and its existence within the game hierarchy.
 
 	The observer function will execute once the instance exists _and_ is parented within
-	the game hierarchy. If the InstanceHandle changes _or_ the instance is deparented,
-	then the cleanup function will be triggered.
+	the game hierarchy. If the instance is deparented then the cleanup function will be
+	triggered.
 
 	Since attributes use InstanceHandles, it is common to see `observeAttribute` paired
 	with `observeInstanceHandle`.
@@ -30,7 +30,7 @@ type InstanceHandle = {
 	end)
 	```
 ]=]
-const function observeInstanceHandle(handle: InstanceHandle, observer: (instance: Instance) -> (() -> ())?)
+local function observeInstanceHandle(handle: InstanceHandle, observer: (instance: Instance) -> (() -> ())?)
 	if handle == nil then
 		return function() end
 	end
