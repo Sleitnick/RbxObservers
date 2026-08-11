@@ -16,6 +16,7 @@ export type AttributeValue =
 	| NumberRange
 	| Rect
 	| Font
+	| InstanceHandle
 
 type Callback = (value: AttributeValue) -> (() -> ())?
 
