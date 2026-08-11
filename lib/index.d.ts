@@ -149,6 +149,25 @@ interface Observers {
 	 * @returns Cleanup function, which stops observing the local character.
 	 */
 	observeLocalCharacter: <C extends Model = Model>(callback: (character: C) => (() => void) | void) => () => void;
+
+	/**
+	 * ```ts
+	 * Observers.observeAttribute(someInstance, "InstanceAttr", (handle) => {
+	 * 	return Observers.observeInstanceHandle(handle, (instance) => {
+	 * 		print("Observing instance", instance.GetFullName());
+	 * 		return () => {
+	 * 			print("Stop observing instance");
+	 * 		};
+	 * 	});
+	 * });
+	 * ```
+	 * Observes an InstanceHandle's Instance. The observer will trigger when the InstanceHandle's Instance exists _and_ the instance is within the
+	 * game hierarchy. If the handle changes or the instance is deparented, then the cleanup callback will be invoked.
+	 * @param handle The InstanceHandle.
+	 * @param callback The observer callback.
+	 * @returns Cleanup function, which stops observing the instance handle.
+	 */
+	observeInstanceHandle: (handle: InstanceHandle, callback: (instance: Instance) => (() => void) | void) => () => void;
 }
 
 declare const Observers: Observers;

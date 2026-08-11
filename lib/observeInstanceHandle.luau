@@ -6,6 +6,30 @@ type InstanceHandle = {
 	Get: (self: InstanceHandle) -> Instance?,
 }
 
+--[=[
+	@within Observers
+
+	Creates an observer that captures the existence of an InstanceHandle's Instance
+	and its existence within the game hierarchy.
+
+	The observer function will execute once the instance exists _and_ is parented within
+	the game hierarchy. If the InstanceHandle changes _or_ the instance is deparented,
+	then the cleanup function will be triggered.
+
+	Since attributes use InstanceHandles, it is common to see `observeAttribute` paired
+	with `observeInstanceHandle`.
+
+	```lua
+	observeAttribute(someInstance, "InstanceAttr", function(handle)
+		return observeInstanceHandle(handle, function(instance)
+			print("Observing instance", instance:GetFullName())
+			return function()
+				print("Stopped observing instance")
+			end
+		end)
+	end)
+	```
+]=]
 const function observeInstanceHandle(handle: InstanceHandle, observer: (instance: Instance) -> (() -> ())?)
 	if handle == nil then
 		return function() end
