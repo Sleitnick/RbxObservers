@@ -11,5 +11,6 @@
 	"eslint.format.enable": true,
 	"stylua.targetReleaseVersion": "latest",
 	"luau-lsp.fflags.enableNewSolver": true,
+	"luau-lsp.platform.type": "roblox",
 	"files.eol": "\n"
 }
